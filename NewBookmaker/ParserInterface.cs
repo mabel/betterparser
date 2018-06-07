@@ -57,5 +57,14 @@ namespace Better.Bookmakers
         /// <param name="callback">Коллбек, который надо вызвать со структурой Parsed, которую вернёт роутер, если нужно</param>
         Task Start(string urlMatches, string urlOneMatch, double speed_kef = 1, Delegate callback = null);
 
+        /// <summary>
+        /// Отправить ошибку парса в основную прогу немедленно [асинхронно]
+        /// [реализовано через callback, чтобы редкие виды ошибок не приводили к неотправке самого списка ошибок]
+        /// </summary>
+        /// <param name="name">Название\описание ошибки</param>
+        /// <param name="path">Путь до ошибки. Реализовано в виде строки можно было тонко описать момент её возникновения</param>
+        /// <param name="data">Любые прикладные данные этой ошибки, которые вам нужно будет знать для её исправления. Будет сериализовано в json и записано.</param>
+        void sendException(string name, string path = "", object data = null);
+
     }
 }

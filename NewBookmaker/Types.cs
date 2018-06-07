@@ -66,7 +66,7 @@ namespace Better.Bookmakers.Types
         /// <summary>
         /// Тип фрейма
         /// </summary>
-        public enum WebSocketRequestFrameType:byte { Text = 1, Binary = 2 }
+        public enum WebSocketRequestFrameType : byte { Text = 1, Binary = 2 }
 
     }
 
@@ -240,6 +240,7 @@ namespace Better.Bookmakers.Types
         /// </summary>
         List<Kef> DeletedKefs;
 
+        
         /// <summary>
         /// Одна линия [т.е. группа коэффициентов]
         /// </summary>
@@ -259,7 +260,7 @@ namespace Better.Bookmakers.Types
             string name;
 
             /// <summary>
-            /// [FullMode] Список кефов для этой линии
+            /// [FullMode] Список кефов этой линии
             /// </summary>
             List<Kef> kefs;
 
@@ -283,11 +284,13 @@ namespace Better.Bookmakers.Types
 
             /// <summary>
             /// Название кефа
+            /// [Не требуется при обновлении кефов в LiveMode]
             /// </summary>
             string name;
 
             /// <summary>
             /// Значение кефа
+            /// Если кеф заблокирован, то отрицательное значение
             /// </summary>
             double value;
 
@@ -304,7 +307,7 @@ namespace Better.Bookmakers.Types
     /// И есть те, кто высылает только изменения: кэф добавлен, изменён, удалён, заблокирован 
     /// с момента последнего запроса.
     /// </summary>
-    public enum ParserModes:byte
+    public enum ParserModes : byte
     {
 
         /// <summary>
@@ -318,5 +321,5 @@ namespace Better.Bookmakers.Types
         LiveMode = 2
 
     }
-
+    
 }

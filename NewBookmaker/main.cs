@@ -30,24 +30,6 @@ namespace Better.Bookmakers
         /// </summary>
         public int Encoding_OneMatch { get; set; } = 65001;
 
-        #region "Обратные запросы [если нужны]"
-
-
-        /// <summary>
-        /// Коллбек: отправить обычный запрос
-        /// </summary>
-        /// <returns></returns>
-        public delegate NormalRequest RequestCallback();
-
-        /// <summary>
-        /// Коллбек: отправить WS фрейм
-        /// </summary>
-        /// <returns></returns>
-        public delegate WebSocketRequest WebSocketRequestCallback();
-
-        #endregion
-
-
         /// <summary>
         /// Инициализация при первичной подгрузке парсера
         /// </summary>
@@ -86,7 +68,9 @@ namespace Better.Bookmakers
 
             // WebClientCookie - расширенная версия вебклиента, которая сама хранит сессию, подставляет User-agent
             // и другие стандартные заголовки
-            // WebClientCookie WC = new WebClientCookie();
+            // System.Net.CookieContainer GlobalCookieContainer = new System.Net.CookieContainer();
+            // WebClientCookie WC = new WebClientCookie(GlobalCookieContainer);
+
 
             // "Разогреть" страницу и получить основные куки букмекера
             // WC.Headers.Add("Referer", "");
@@ -104,11 +88,63 @@ namespace Better.Bookmakers
             // отправить NormalRequest в роутер
             // Parsed data = Router(pageTypes.MatchesList, requestTypes.Normal, ref request, ref noRequest);
             // Вызвать коллбек callback.DynamicInvoke(data), если он есть
-            // Подождать стандартное время обновления с учётом коэффициента ускорения
+            // Подождать стандартное для букмекера время обновления с учётом коэффициента ускорения
             // await Task.Delay(speed_kef*5000)
             // }
 
         }
 
+        #region "Контроль ошибок"
+
+        /// <summary>
+        /// Отправить ошибку парса в основную прогу немедленно [асинхронно]
+        /// [реализовано через callback, чтобы редкие виды ошибок не приводили к неотправке самого списка ошибок]
+        /// </summary>
+        /// <param name="name">Название\описание ошибки</param>
+        /// <param name="path">Путь до ошибки. Реализовано в виде строки можно было тонко описать момент её возникновения</param>
+        /// <param name="data">Любые прикладные данные этой ошибки, которые вам нужно будет знать для её исправления. Будет сериализовано в json и записано.</param>
+        public void sendException(string name , string path = "", object data=null) {
+            if (ExceptionCallback != null)
+            {
+                ExceptionCallback.BeginInvoke(name, path, data, (iResult) => 
+                {
+                    ExceptionCallback.EndInvoke(iResult);
+                },
+                null);
+            }
+        }
+
+        /// <summary>
+        /// Коллбек для ловли ошибок в реалтайме в основной проге
+        /// [присоединяется родительской программой]
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="path"></param>
+        /// <param name="data"></param>
+        public delegate void ExceptionCallbackDelegate(string name, string path = "", object data = null);
+        public ExceptionCallbackDelegate ExceptionCallback;
+
+        #endregion
+
+        #region "Обратные запросы"
+        
+        // По-умолчанию Router лишь получает страницы и обрабатывает их
+        // Тут можно отправить запрос из самого парсера, а не функции Start или управляющей программы.
+        
+        // Пока реализована как заготовка, если будет нужно - пишите.
+
+        /// <summary>
+        /// Коллбек: отправить обычный запрос
+        /// </summary>
+        /// <returns></returns>
+        public delegate NormalRequest RequestCallback();
+
+        /// <summary>
+        /// Коллбек: отправить WS фрейм
+        /// </summary>
+        /// <returns></returns>
+        public delegate WebSocketRequest WebSocketRequestCallback();
+
+        #endregion
     }
 }
