@@ -210,36 +210,56 @@ namespace Better.Bookmakers.Types
         ParserModes mode;
 
         /// <summary>
-        /// [FullMode] Список всех линий с вложенными кефами, режим распарса всех кефов целиком
+        /// Список матчей, для которых были распаршены линии и кефы
+        /// Обычно со страницы матча парсится 1 матч, и массив будет из одного элемента
+        /// но есть Фонбет и мб. другие буки, где матчи в запросе приходят сразу все
         /// </summary>
-        List<Line> lines;
+        List<Match> matches;
 
         /// <summary>
-        /// [LiveMode] Список новых линий БЕЗ вложенных кефов, только описание линии
+        /// Один матч
         /// </summary>
-        List<Line> NewLines;
+        public class Match
+        {
 
-        /// <summary>
-        /// [LiveMode] Список уникальных айдишников линий Line.ID, которые были удалены, на сайте-источнике
-        /// </summary>
-        List<string> DeletedLines;
+            /// <summary>
+            /// Уникальный ID матча на странице источнике 
+            /// равен тому, что парсится со страницы матчей ParsedMatches.Match.ID
+            /// </summary>
+            string ID;
 
-        /// <summary>
-        /// [LiveMode] Список новых кефов
-        /// </summary>
-        List<Kef> NewKefs;
+            /// <summary>
+            /// [FullMode] Список всех линий с вложенными кефами, режим распарса всех кефов целиком
+            /// </summary>
+            List<Line> lines;
 
-        /// <summary>
-        /// [LiveMode] Обновлённые кефы
-        /// При блокировке кефов их нужно вносить сюда и указывать отрицательное значение Kef.value
-        /// </summary>
-        List<Kef> UpdatedKefs;
+            /// <summary>
+            /// [LiveMode] Список новых линий БЕЗ вложенных кефов, только описание линии
+            /// </summary>
+            List<Line> NewLines;
 
-        /// <summary>
-        /// [LiveMode] Удалённые кефы
-        /// </summary>
-        List<Kef> DeletedKefs;
+            /// <summary>
+            /// [LiveMode] Список уникальных айдишников линий Line.ID, которые были удалены, на сайте-источнике
+            /// </summary>
+            List<string> DeletedLines;
 
+            /// <summary>
+            /// [LiveMode] Список новых кефов
+            /// </summary>
+            List<Kef> NewKefs;
+
+            /// <summary>
+            /// [LiveMode] Обновлённые кефы
+            /// При блокировке кефов их нужно вносить сюда и указывать отрицательное значение Kef.value
+            /// </summary>
+            List<Kef> UpdatedKefs;
+
+            /// <summary>
+            /// [LiveMode] Удалённые кефы
+            /// </summary>
+            List<Kef> DeletedKefs;
+
+        }
         
         /// <summary>
         /// Одна линия [т.е. группа коэффициентов]
