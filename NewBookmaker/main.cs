@@ -63,7 +63,7 @@ namespace Better.Bookmakers
         /// <param name="urlOneMatch">Ссылка на страницу конкретного матча, если надо запустить парсинг кефов. Иначе - пустая строка.</param>
         /// <param name="speed_kef">Коэффициент ускорения отправки запросов</param>
         /// <param name="callback">Коллбек, который надо вызвать со структурой Parsed, которую вернёт роутер, если нужно</param>
-        public async Task Start(string urlMatches, string urlOneMatch, double speed_kef = 1, Delegate callback = null)
+        public async Task Start(string urlMatches, string urlOneMatch, double speed_kef = 1, Action<Parsed> callback = null)
         {
 
             // WebClientCookie - расширенная версия вебклиента, которая сама хранит сессию, подставляет User-agent

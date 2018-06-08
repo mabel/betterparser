@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Better.Bookmakers.Types;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,8 +21,17 @@ namespace Better.Bookmakers
             bookmaker.init();
             bookmaker.ExceptionCallback = exceptionCallback;
 
-            bookmaker.Start("https://fonbet.com/#!/live", "").Wait();
+            bookmaker.Start("https://fonbet.com/#!/live", "", 1, startCallback).Wait();
 
+        }
+
+        /// <summary>
+        /// Тестовый коллбек, принимающий результаты парсинга от ручных запросов
+        /// </summary>
+        /// <param name="data"></param>
+        static void startCallback(Parsed data)
+        {
+            System.Diagnostics.Debugger.Break();
         }
 
         /// <summary>
@@ -34,6 +44,7 @@ namespace Better.Bookmakers
         {
             System.Diagnostics.Debugger.Break();
         }
+
 
     }
 }
